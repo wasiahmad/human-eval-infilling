@@ -13,9 +13,9 @@ from human_eval_infilling.execution import check_correctness
 
 
 def estimate_pass_at_k(
-    num_samples: Union[int, List[int], np.ndarray],
-    num_correct: Union[List[int], np.ndarray],
-    k: int,
+        num_samples: Union[int, List[int], np.ndarray],
+        num_correct: Union[List[int], np.ndarray],
+        k: int,
 ) -> np.ndarray:
     """
     Estimates pass@k of each problem and returns them in an array.
@@ -39,11 +39,11 @@ def estimate_pass_at_k(
 
 
 def evaluate(
-    benchmark_name: str,
-    sample_file: str,
-    k: List[int] = [1, 10, 100],
-    n_workers: int = 4,
-    timeout: float = 3.0,
+        benchmark_name: str,
+        sample_file: str,
+        k: List[int] = [1, 10, 100],
+        n_workers: int = 4,
+        timeout: float = 3.0,
 ):
     """
     Evaluates the functional correctness of generated samples, and writes
@@ -110,10 +110,11 @@ def evaluate(
             }
         )
 
+    print(pass_at_k)
     out_file = sample_file[:-6] + "_eval_results.jsonl"
     print(f"Writing results to {out_file}...")
     # following evalplus style
     with open(out_file, "w") as f:
-            json.dump(output_results, f)
+        json.dump(output_results, f)
 
     return pass_at_k
