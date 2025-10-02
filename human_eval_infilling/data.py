@@ -1,19 +1,21 @@
 import gzip
 import json
 import os
+from typing import Dict, Iterable
+
 import tempdir
 import wget
 from appdirs import user_cache_dir
-from typing import Dict, Iterable
 
 CACHE_DIR = user_cache_dir("evalplus")
 benchmark_files = {
-    "single-line": "https://github.com/openai/human-eval-infilling/raw/master/data/HumanEval-SingleLineInfilling.jsonl.gz",
-    "multi-line": "https://github.com/openai/human-eval-infilling/raw/master/data/HumanEval-MultiLineInfilling.jsonl.gz",
-    "random-span": "https://github.com/openai/human-eval-infilling/raw/master/data/HumanEval-RandomSpanInfilling.jsonl.gz",
-    "random-span-light": "https://github.com/openai/human-eval-infilling/raw/master/data/HumanEval-RandomSpanInfillingLight.jsonl.gz",
+    "single_line": "https://github.com/openai/human-eval-infilling/raw/master/data/HumanEval-SingleLineInfilling.jsonl.gz",
+    "multi_line": "https://github.com/openai/human-eval-infilling/raw/master/data/HumanEval-MultiLineInfilling.jsonl.gz",
+    "random_span": "https://github.com/openai/human-eval-infilling/raw/master/data/HumanEval-RandomSpanInfilling.jsonl.gz",
+    "random_span_light": "https://github.com/openai/human-eval-infilling/raw/master/data/HumanEval-RandomSpanInfillingLight.jsonl.gz",
     "test": "https://github.com/openai/human-eval-infilling/raw/master/data/example_problem.jsonl",
 }
+
 
 def make_cache(gzip_url, cache_path):
     # Check if human eval file exists in CACHE_DIR
@@ -21,7 +23,7 @@ def make_cache(gzip_url, cache_path):
         # Install HumanEval dataset and parse as jsonl
         print(f"Downloading dataset from {gzip_url}")
         with tempdir.TempDir() as tmpdir:
-            plus_gz_path = os.path.join(tmpdir, f"data.jsonl.gz")
+            plus_gz_path = os.path.join(tmpdir, "data.jsonl.gz")
             wget.download(gzip_url, plus_gz_path)
 
             with gzip.open(plus_gz_path, "rb") as f:
@@ -35,12 +37,13 @@ def make_cache(gzip_url, cache_path):
         with open(cache_path, "w") as f:
             f.write(plus)
 
+
 def read_problems(benchmark_name: str) -> Dict[str, Dict]:
     benchmark_file_names = {
-        "single-line": "HumanEval-SingleLineInfilling.jsonl",
-        "multi-line": "HumanEval-MultiLineInfilling.jsonl",
-        "random-span": "HumanEval-RandomSpanInfilling.jsonl",
-        "random-span-light": "HumanEval-RandomSpanInfillingLight.jsonl",
+        "single_line": "HumanEval-SingleLineInfilling.jsonl",
+        "multi_line": "HumanEval-MultiLineInfilling.jsonl",
+        "random_span": "HumanEval-RandomSpanInfilling.jsonl",
+        "random_span_light": "HumanEval-RandomSpanInfillingLight.jsonl",
         "test": "example_problem.jsonl",
     }
     benchmark_file_path = os.path.join(CACHE_DIR, benchmark_file_names[benchmark_name])
